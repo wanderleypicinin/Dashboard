@@ -14,10 +14,16 @@ namespace DashboardLiveChartsExample
     { 
         
         private readonly string _connectionString;
+        private string server;
 
         public DatabaseServices(string server, string database, string userId, string password)
         {
             _connectionString = $"Server={server};Database={database};Uid={userId};Pwd={password};";
+        }
+
+        public DatabaseServices(string server)
+        {
+            this.server = server;
         }
 
         public List<VendaMensal> ObterVendasMensais()

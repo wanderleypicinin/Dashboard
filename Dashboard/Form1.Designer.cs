@@ -41,6 +41,7 @@
             bindingSource1 = new BindingSource(components);
             bindingSource2 = new BindingSource(components);
             cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
+            pieChart2 = new LiveCharts.WinForms.PieChart();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource2).BeginInit();
             SuspendLayout();
@@ -125,11 +126,20 @@
             cartesianChart1.TabIndex = 8;
             cartesianChart1.Text = "cartesianChart1";
             // 
+            // pieChart2
+            // 
+            pieChart2.Location = new Point(542, 106);
+            pieChart2.Name = "pieChart2";
+            pieChart2.Size = new Size(246, 231);
+            pieChart2.TabIndex = 9;
+            pieChart2.Text = "pieChart2";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(pieChart2);
             Controls.Add(cartesianChart1);
             Controls.Add(labelkpi4Desc);
             Controls.Add(labelkpi4);
@@ -161,5 +171,6 @@
         private BindingSource bindingSource1;
         private BindingSource bindingSource2;
         private LiveCharts.WinForms.CartesianChart cartesianChart1;
+        private LiveCharts.WinForms.PieChart pieChart2;
     }
 }

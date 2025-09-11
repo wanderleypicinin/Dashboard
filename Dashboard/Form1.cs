@@ -1,86 +1,103 @@
 
 
-using System.Numerics;
+
 using DashboardLiveChartsExample;
 using LiveCharts.Defaults;
 using LiveCharts;
 using LiveCharts.Wpf;
 
 
+
 namespace Dashboard
 {
     public partial class Form1 : Form
     {
-        private object _databaseService;
+        private DatabaseServices _databaseService;
+        private object kpis;
         private object pieChart1;
 
         public Form1()
         {
             InitializeComponent();
-            SetupKPIs();
-            SetupLineChart();
-            
+            //SetupKPIs();
+            //SetupLineChart();
+            _databaseService = new DatabaseServices(
+             server: "localhost",
+             database: "DashboardDB",
+             userId: "root",
+             password: "Info@2025"
+             );
+
+            //Carregar dados  do banco
+            LoadDashboardData();
+
         }
 
-        private void SetupLineChart()
+        private void LoadDashboardData()
         {
-            //Cria uma nova Série do tipo Line ( linha)
-            var lineSeries = new LineSeries
+            try
             {
-                Title = "Vendas Mensais",
-                //Usaremos valores numéricos (double) para o eixo Y
-                Values = new ChartValues<double> { 42321,  53211, 48975, 65234, 71230, 82321, 82345, 94412, 101200, 88123, 75321, 112450 },
-            };
-        }
+                //1. Carregar e configurar KPIs
+                SetupKPIs();
+                //2.Carregar Configurar gráfico de linhas
+                SetupLineChart();
+                //3. Carregar e configurar gráfico de pizza
+                SetupPieChart();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao carregar dados: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
+        }
         private void SetupKPIs()
         {
-            labelkpi1Desc.Text = "Receita Total (Mês)";
-            labelkpi1.Text = "R$ 152.304,05";
+            var KPIs = _databaseService.ObterKPIs();
+            //Supondo que temos menos de 4 KPIs na ordem correta
+            if (KPIs.Count >= 4)
+            {
+                labelkpi1.Text = $"{KPIs[0].Valor.ToString("C2")}";
+                labelkpi1Desc.Text = KPIs[0].Nome;
 
-            labelkpi2.Text = "1.284";
-            labelkpi2Desc.Text = "Total de Vendas";
+                labelkpi2.Text = $"{KPIs[1].Valor} {KPIs[1].Unidade}";
+                labelkpi2Desc.Text = KPIs[1].Nome;
 
-            labelkpi3.Text = "R$ 118,57";
-            labelkpi3Desc.Text = "Ticket Médio";
+                labelkpi3.Text = $"{KPIs[2].Valor.ToString("C2")}";
+                labelkpi3Desc.Text = KPIs[2].Nome;
 
-            labelkpi4.Text = "12.4%";
-            labelkpi4Desc.Text = "Crescimento Anual"; 
+                labelkpi4.Text = $"{KPIs[3].Valor} {KPIs[3].Unidade}";
+                labelkpi4Desc.Text = KPIs[3].Nome;
+            }
 
         }
-
-    }
-     private void SetupLineChart()
+        private void SetupLineChart()
         {
             var vendas = _databaseService.ObterVendasMensais();
-
             var lineSeries = new LineSeries
             {
                 Title = "Vendas Mensais",
-                Values = new ChartValues<double>(vendas.Select(v => (double)v.Valor)),
+                Values = new ChartValues<decimal>(vendas.Select(v => v.Valor)),
                 Fill = System.Windows.Media.Brushes.Transparent,
                 StrokeThickness = 3,
                 PointGeometry = DefaultGeometries.Circle,
                 PointGeometrySize = 10,
                 PointForeground = System.Windows.Media.Brushes.White
             };
-
             cartesianChart1.Series = new SeriesCollection { lineSeries };
-
             cartesianChart1.AxisX.Add(new Axis
             {
                 Title = "Mês",
                 Labels = vendas.Select(v => v.Mes).ToArray()
             });
-
             cartesianChart1.AxisY.Add(new Axis
             {
                 Title = "Vendas (R$)",
                 LabelFormatter = value => value.ToString("C0")
             });
-
             cartesianChart1.LegendLocation = LegendLocation.Top;
-        }
+        }  
+     
+
 
         private void SetupPieChart()
         {
@@ -99,9 +116,9 @@ namespace Dashboard
                 });
             }
 
-            pieChart1.Series = pieSeriesCollection;
-            pieChart1.InnerRadius = 50;
-            pieChart1.LegendLocation = LegendLocation.Bottom;
+            pieChart2.Series = pieSeriesCollection;
+            pieChart2.InnerRadius = 50;
+            pieChart2.LegendLocation = LegendLocation.Bottom;
         }
 
         // Botão para atualizar os dados
@@ -111,10 +128,7 @@ namespace Dashboard
             MessageBox.Show("Dados atualizados com sucesso!", "Atualização", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void LoadDashboardData()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
 
