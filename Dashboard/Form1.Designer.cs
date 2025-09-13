@@ -42,6 +42,7 @@
             bindingSource2 = new BindingSource(components);
             cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             pieChart2 = new LiveCharts.WinForms.PieChart();
+            btnAtualizar = new Button();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource2).BeginInit();
             SuspendLayout();
@@ -134,11 +135,22 @@
             pieChart2.TabIndex = 9;
             pieChart2.Text = "pieChart2";
             // 
+            // btnAtualizar
+            // 
+            btnAtualizar.Location = new Point(294, 385);
+            btnAtualizar.Name = "btnAtualizar";
+            btnAtualizar.Size = new Size(75, 23);
+            btnAtualizar.TabIndex = 10;
+            btnAtualizar.Text = "Atualizar:";
+            btnAtualizar.UseVisualStyleBackColor = true;
+            btnAtualizar.Click += btnAtualizar_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnAtualizar);
             Controls.Add(pieChart2);
             Controls.Add(cartesianChart1);
             Controls.Add(labelkpi4Desc);
@@ -172,5 +184,6 @@
         private BindingSource bindingSource2;
         private LiveCharts.WinForms.CartesianChart cartesianChart1;
         private LiveCharts.WinForms.PieChart pieChart2;
+        private Button btnAtualizar;
     }
 }

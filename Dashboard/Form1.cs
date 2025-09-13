@@ -95,8 +95,8 @@ namespace Dashboard
                 LabelFormatter = value => value.ToString("C0")
             });
             cartesianChart1.LegendLocation = LegendLocation.Top;
-        }  
-     
+        }
+
 
 
         private void SetupPieChart()
